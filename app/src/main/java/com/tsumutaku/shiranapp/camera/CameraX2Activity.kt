@@ -116,7 +116,9 @@ class CameraX2Activity() : AppCompatActivity() {
                 cameraProvider.bindToLifecycle(
                     this, cameraSelector, preview)
             } catch(exc: Exception) {
-                Log.e(TAG, "Use case binding failed", exc)
+                if (MainActivity.debag){
+                    Log.e(TAG, "Use case binding failed", exc)
+                }
             }
         }, ContextCompat.getMainExecutor(this))
 

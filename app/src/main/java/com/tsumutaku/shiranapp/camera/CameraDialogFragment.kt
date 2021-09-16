@@ -18,7 +18,6 @@ class SimpleDialogFragment(val score: Int): DialogFragment() {
             .setTitle("${totalDay}日目 スコア${score}")
             //.setMessage("Here Message")
             .setPositiveButton("done") { dialog, id ->
-                println("dialog:$dialog which:$id")
             }
 
         return builder.create()

@@ -30,8 +30,8 @@ class SaveData {
         )
 
         docRef.document(StrDate).set(data)
-        .addOnSuccessListener { Log.e("TAG", "動画作成日とURIの保存成功") }
-        .addOnFailureListener { e -> Log.e("TAG", "保存失敗", e) }
+        //.addOnSuccessListener { Log.e("TAG", "動画作成日とURIの保存成功") }
+        //.addOnFailureListener { e -> Log.e("TAG", "保存失敗", e) }
     }
 
 
