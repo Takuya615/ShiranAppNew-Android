@@ -1,5 +1,6 @@
 package com.tsumutaku.shiranapp.ui.dashboard
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +16,7 @@ import com.tsumutaku.shiranapp.databinding.FragmentDashboardBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.tsumutaku.shiranapp.camera.SaveData
 
 class DashboardFragment : Fragment() {
 
@@ -49,42 +51,14 @@ class DashboardFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mdateList = mutableListOf<String>()
-        scoreList = mutableListOf()
-        mAuth = FirebaseAuth.getInstance()
-        db = FirebaseFirestore.getInstance()
-        val user = mAuth.currentUser
-
-        //val friendUid = uidrequireActivity().intent.getStringExtra("friendUid")
-
-        //¸友達の動画確認ようコード
-        //val uid = notificationsViewModel.modelUid
-        //if(uid != user!!.uid) { isfriend = true}
-        val uid = user!!.uid
-
-        coll =db.collection(uid)
-
         (activity as AppCompatActivity).supportActionBar?.apply {
             title = "活動記録"
             setDisplayHomeAsUpEnabled(false)//表示
         }
 
-        coll/*.whereEqualTo("friend", false)*/.get()//.orderBy("date", Query.Direction.DESCENDING)
-            .addOnSuccessListener { documents ->
-                for (document in documents) {
-                    val date = document.data["date"].toString()
-                    val score = document.data["score"].toString()
-                    mdateList.add(date)
-                    scoreList.add(score)
+        mdateList = SaveData.loadArrayList(requireContext(),requireContext().getString(R.string.prefs_date_list))
+        scoreList = SaveData.loadArrayList(requireContext(),requireContext().getString(R.string.prefs_score_list))
 
-                }
-                mdateList.reverse()
-                scoreList.reverse()
-
-                adapter.notifyDataSetChanged()
-                binding.progressBar2.visibility = View.INVISIBLE
-            }
-        //.addOnFailureListener { exception -> Log.w("TAG", "Error getting documents: ", exception) }
 
         adapter = VideoListAdapter(mdateList,scoreList)
         val layoutManager = LinearLayoutManager(requireContext())
@@ -95,7 +69,7 @@ class DashboardFragment : Fragment() {
         binding.recyclerView.layoutManager = layoutManager
         binding.recyclerView.adapter = adapter
         binding.recyclerView.setHasFixedSize(true)
-
+        binding.progressBar2.visibility = View.INVISIBLE
         // インターフェースの実装
         adapter.setOnItemClickListener(object : VideoListAdapter.OnItemClickListener {
             override fun onItemClickListener(view: View, position: Int, clickedText: String) {
@@ -111,7 +85,7 @@ class DashboardFragment : Fragment() {
                         //Toast.makeText(applicationContext, "${clickedText}がタップされました", Toast.LENGTH_LONG).show()
                     }*/
                     R.id.itemdeleate -> {
-                        coll.document(mdateList[position]).delete()
+                        //coll.document(mdateList[position]).delete()
                         Toast.makeText(requireContext(), "${clickedText}を削除しました", Toast.LENGTH_LONG).show()
 
                         mdateList.remove(mdateList[position])
@@ -120,6 +94,8 @@ class DashboardFragment : Fragment() {
                         adapter.notifyItemRangeChanged(position, mdateList.size)
                         //adapter.notifyDataSetChanged()
 
+                        SaveData.saveArrayList(requireContext(),requireContext().getString(R.string.prefs_date_list), mdateList)
+                        SaveData.saveArrayList(requireContext(),requireContext().getString(R.string.prefs_score_list),scoreList)
                     }
                 }
             }

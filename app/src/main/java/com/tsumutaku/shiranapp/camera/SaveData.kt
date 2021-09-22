@@ -15,23 +15,21 @@ import java.util.*
 
 class SaveData {
 
-    private var mAuth: FirebaseAuth = FirebaseAuth.getInstance()
-    private var db: FirebaseFirestore = FirebaseFirestore.getInstance()
-    fun WriteToStore(score:Int){
-        val user = mAuth.currentUser
-        val docRef = db.collection(user!!.uid)
-        val date= Calendar.getInstance().getTime()
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")//
-        val StrDate =dateFormat.format(date).toString()
-        val data = hashMapOf(
-            "date" to StrDate,
-            "score" to score,
-            "url" to ""
-        )
+    //private var mAuth: FirebaseAuth = FirebaseAuth.getInstance()
+    //private var db: FirebaseFirestore = FirebaseFirestore.getInstance()
+    fun WriteToStore(context: Context, score:Int){
 
-        docRef.document(StrDate).set(data)
-        //.addOnSuccessListener { Log.e("TAG", "動画作成日とURIの保存成功") }
-        //.addOnFailureListener { e -> Log.e("TAG", "保存失敗", e) }
+        if(MainActivity.debag){Log.e("tag", "スコアと日付を記録")}
+        val date= Calendar.getInstance().getTime()
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+        val StrDate =dateFormat.format(date).toString()
+
+        val dateList = SaveData.loadArrayList(context,context.getString(R.string.prefs_date_list))
+        val scoreList = SaveData.loadArrayList(context,context.getString(R.string.prefs_score_list))
+        dateList.add(StrDate)
+        scoreList.add(score.toString())
+        saveArrayList(context,context.getString(R.string.prefs_date_list),dateList)
+        saveArrayList(context,context.getString(R.string.prefs_score_list),scoreList)
     }
 
 

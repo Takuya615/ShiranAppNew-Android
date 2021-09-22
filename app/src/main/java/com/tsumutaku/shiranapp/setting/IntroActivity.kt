@@ -2,12 +2,15 @@ package com.tsumutaku.shiranapp.setting
 
 import android.app.AlertDialog
 import android.app.Dialog
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.fragment.app.DialogFragment
 import com.tsumutaku.shiranapp.R
+import com.tsumutaku.shiranapp.camera.CameraX2Activity
 import com.tsumutaku.shiranapp.databinding.ActivityIntroBinding
+import com.tsumutaku.shiranapp.setting.tutorial.VideoPlayerActivity
 
 class IntroActivity : AppCompatActivity() {
     private lateinit var binding: ActivityIntroBinding
@@ -15,7 +18,7 @@ class IntroActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        title = "　しらんプリ　詳細"
+        title = "　しらんプリ　説明"
         binding = ActivityIntroBinding.inflate(layoutInflater)
         setContentView(binding.root)
         settingButtons()
@@ -30,13 +33,18 @@ class IntroActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
     private fun settingButtons(){
+        binding.video.setOnClickListener {
+            val intent= Intent(this, VideoPlayerActivity::class.java)
+            startActivity(intent)
+        }
+
         binding.q1.setOnClickListener {
             val dialog = introFragment(
                 "アプリの流れ",
                 """
                     
             ルールはカンタン。
-            カメラで毎日、運動した記録をつけるだけ。
+            毎日、運動した記録をつけるだけ。
             
             
             初日はたったの５秒からスタート。
@@ -45,10 +53,6 @@ class IntroActivity : AppCompatActivity() {
             ２４０秒
             いつの間にか４分間のHIITができるようになっています。
             
-            
-            あとはあなたが続けたいと思えば、
-            気づくと引き締まった身体が手に入っています。
-            一緒に頑張りましょう。
                 """.trimIndent())
             dialog.show(supportFragmentManager, "intro")
         }
@@ -71,7 +75,7 @@ class IntroActivity : AppCompatActivity() {
             
             1分 HIITは、45分 ランニングに匹敵する身体機能アップ効果が確認されています。
             近年、もっとも効率の良い運動として注目を浴びています。
-            本アプリでは、スクワットやバーピーなど、その場ですぐできる運動でHIITにトライしましょう。
+            
             
                 """.trimIndent())
             dialog.show(supportFragmentManager, "intro")

@@ -1,13 +1,12 @@
 package com.tsumutaku.shiranapp
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -15,7 +14,6 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.tsumutaku.shiranapp.databinding.ActivityMainBinding
-import com.tsumutaku.shiranapp.setting.LoginActivity
 import com.tsumutaku.shiranapp.setting.PrivacyPolicyActivity
 import com.tsumutaku.shiranapp.setting.tutorial.TutorialCoachMarkActivity
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -32,9 +30,7 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         val navView: BottomNavigationView = binding.navView
-
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -46,12 +42,13 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
-        val user= FirebaseAuth.getInstance().currentUser
-        if(user==null){//ログインしていなければ
-            val intent= Intent(this, LoginActivity::class.java)
+        val prefs = getSharedPreferences( "preferences_key_sample", Context.MODE_PRIVATE)
+        val Tuto1 : Boolean = prefs.getBoolean("Tuto1",false)
+        if(!Tuto1){
+            val intent= Intent(this, IntroActivity::class.java)
             startActivity(intent)
-            finish()
         }
+
     }
 
     override fun onStart(){
@@ -85,7 +82,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val intent2= Intent(this, LoginActivity::class.java)
         val intent3= Intent(this, IntroActivity::class.java)
         val intent4= Intent(this, PrivacyPolicyActivity::class.java)
 
@@ -96,11 +92,7 @@ class MainActivity : AppCompatActivity() {
                 true
             }*/
             R.id.action_settings -> startActivity(intent3)
-            R.id.action_logout->{FirebaseAuth.getInstance().signOut()
-                Toast.makeText(this,"ログアウトしました", Toast.LENGTH_LONG).show()
-                startActivity(intent2)
-                finish()
-            }
+
             R.id.action_privacy_policy -> startActivity(intent4)
         }
         return super.onOptionsItemSelected(item)

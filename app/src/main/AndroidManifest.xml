@@ -14,11 +14,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ShiranAppNewAndroid">
-        <activity android:name=".setting.IntroActivity"></activity>
+        <activity
+            android:name=".setting.tutorial.VideoPlayerActivity"
+            android:exported="true" />
+        <activity android:name=".setting.IntroActivity" />
         <activity android:name=".camera.CameraX2Activity" />
         <activity android:name=".setting.PrivacyPolicyActivity" />
-        <activity android:name=".setting.LoginActivity" />
-        <activity android:name=".camera.CameraXActivity" />
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name">

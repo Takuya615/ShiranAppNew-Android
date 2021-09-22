@@ -10,10 +10,10 @@
     <TextView
         android:id="@+id/title"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="80dp"
         android:text="これは半年で４分間のHIITを \n 習慣にするためのアプリです。"
-        android:textSize="20dp"
-        android:gravity="center_horizontal"
+        android:textSize="25dp"
+        android:gravity="center"
         android:background="@color/colorPrimary"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -24,11 +24,12 @@
         app:layout_constraintVertical_bias="0.05"/>
 
     <Button
-        android:id="@+id/q1"
-        android:text="アプリの流れ"
+        android:id="@+id/video"
+        android:text="　▶　アプリ紹介動画"
+        android:textSize="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
+        android:gravity="center"
         android:background="@color/colorPrimary"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -36,10 +37,26 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.2"
+        android:layout_marginTop="15dp"
+        />
+    <Button
+        android:id="@+id/q1"
+        android:text="アプリの流れ"
+        android:textSize="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:background="@color/colorPrimary"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/video"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="15dp"
         />
     <Button
         android:id="@+id/q2"
         android:text="HIITって何？"
+        android:textSize="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
@@ -48,10 +65,12 @@
         app:layout_constraintTop_toBottomOf="@id/q1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="15dp"
         />
     <Button
         android:id="@+id/q3"
         android:text="HIITのメリット"
+        android:textSize="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
@@ -60,10 +79,12 @@
         app:layout_constraintTop_toBottomOf="@id/q2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="15dp"
         />
     <Button
         android:id="@+id/q4"
         android:text="なぜ半年？"
+        android:textSize="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
@@ -72,6 +93,7 @@
         app:layout_constraintTop_toBottomOf="@id/q3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="15dp"
         />
 
 

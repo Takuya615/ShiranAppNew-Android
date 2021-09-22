@@ -1,5 +1,5 @@
 package com.tsumutaku.shiranapp.setting
-
+/**
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -116,4 +116,4 @@ class LoginActivity : AppCompatActivity() {
             startActivity(intent)
         }
     }
-}
+}*/

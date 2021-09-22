@@ -12,6 +12,9 @@
     <string name="prefs_support_requested">FriendSearchActivity</string>
     <string name="prefs_taskTime">Cam</string>
 
+    <string name="prefs_date_list">DashboardFragment</string>
+    <string name="prefs_score_list">DashboardFragment_</string>
+
     //スコアとなる値
     <string name="score_totalDay">CameraDialogFragment1</string>
     <string name="score_continuous">CameraDialogFragment4</string>

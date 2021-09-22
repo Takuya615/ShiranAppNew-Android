@@ -25,9 +25,11 @@ class SimpleDialogFragment(val score: Int): DialogFragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        requireActivity().finish()
+
         SaveData().editScores(requireContext(),score)
-        SaveData().WriteToStore(score)
+        SaveData().WriteToStore(requireContext(),score)
+        requireActivity().finish()
+
     }
 
 }
