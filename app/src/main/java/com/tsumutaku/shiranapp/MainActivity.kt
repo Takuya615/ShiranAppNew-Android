@@ -27,13 +27,14 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+    }
+
+    override fun onResume() {
+        super.onResume()
         val navView: BottomNavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
         val appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications
@@ -43,16 +44,14 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
 
         val prefs = getSharedPreferences( "preferences_key_sample", Context.MODE_PRIVATE)
+        val level = prefs.getInt(getString(R.string.score_level),0)
+        binding.textView.text = "Lv.${level}"
         val Tuto1 : Boolean = prefs.getBoolean("Tuto1",false)
         if(!Tuto1){
             val intent= Intent(this, IntroActivity::class.java)
             startActivity(intent)
         }
 
-    }
-
-    override fun onStart(){
-        super.onStart()
         binding.fab.setOnClickListener { view ->
             //progressbar.visibility = android.widget.ProgressBar.VISIBLE
             if(!MainActivity.debag){
@@ -67,7 +66,6 @@ class MainActivity : AppCompatActivity() {
             //finish()
         }
         coachMark()
-
     }
     fun coachMark(){
         Handler(Looper.getMainLooper()).postDelayed({

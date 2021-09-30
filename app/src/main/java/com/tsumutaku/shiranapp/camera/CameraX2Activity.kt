@@ -42,6 +42,7 @@ class CameraX2Activity() : AppCompatActivity() {
     private lateinit var score: TextView
     private lateinit var sound:Sounds
     private var isCapture: Boolean = false
+    private var mTimer: Timer? = null
     private var time:Int = 0
 
     var runnable = Runnable {  }
@@ -128,7 +129,7 @@ class CameraX2Activity() : AppCompatActivity() {
     private fun startScore() {
         captureButton.visibility = View.INVISIBLE
         captureText.visibility = View.INVISIBLE
-        TimeRecorder(this)
+        TimeRecorder()
     }
 
     private fun allPermissionsGranted(): Boolean {
@@ -142,11 +143,11 @@ class CameraX2Activity() : AppCompatActivity() {
     }
 
 
-    private fun TimeRecorder(context: Context){
-        val mTimer = Timer()
+    private fun TimeRecorder(){
+        mTimer = Timer()
         val taskSec = time//一次的にタスクタイムを保存
         time = 4
-        mTimer.schedule(object : TimerTask() {
+        mTimer?.schedule(object : TimerTask() {
             override fun run() {
                 time -= 1
                 timer.text = setTimer()
@@ -160,7 +161,7 @@ class CameraX2Activity() : AppCompatActivity() {
                     }else{
                         isCapture = false
                         sound.playSound(Sounds.SAD_TROMBONE)
-                        mTimer.cancel()
+                        mTimer?.cancel()
                         //finish()
                         val dialog = SimpleDialogFragment(graphicOverlay.ExerciseIntensity())
                         dialog.show(supportFragmentManager, "simple")
@@ -184,6 +185,7 @@ class CameraX2Activity() : AppCompatActivity() {
         cameraExecutor.shutdown()
         handler.removeCallbacks(runnable)
         sound.close()
+        mTimer?.cancel()
 
     }
 

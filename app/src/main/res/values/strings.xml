@@ -17,9 +17,13 @@
 
     //スコアとなる値
     <string name="score_totalDay">CameraDialogFragment1</string>
+    <string name="score_totalScore">CameraDialogFragment2</string>
+    <string name="score_level">CameraDialogFragment3</string>
     <string name="score_continuous">CameraDialogFragment4</string>
     <string name="score_recover">CameraDialogFragment5</string>
     <string name="score_doNotDay">CameraDialogFragment6</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
 </resources>

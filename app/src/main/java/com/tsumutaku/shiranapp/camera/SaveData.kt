@@ -2,6 +2,7 @@ package com.tsumutaku.shiranapp.camera
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.provider.Settings.Global.getString
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -69,6 +70,7 @@ class SaveData {
             newtot = totalD + 1//総日数
             jsonList.add(IntensityPoint.toString())//今日の分のスコア
             time = addTime(totalD,time)
+            levelUP(context,IntensityPoint)
 
         } else if (different >= 2) {
             if(MainActivity.debag){Log.e("tag", "継続失敗で更新")}
@@ -76,6 +78,7 @@ class SaveData {
             newRec = recover + 1//復活数
             newtot = totalD + 1//総日数
             DoNot = DoNot + different - 1
+            levelUP(context,IntensityPoint)
 
             if(different > now.dayOfMonth){// さぼりが翌月まで続いている場合
                 for (i in 2..now.dayOfMonth) {
@@ -163,6 +166,30 @@ class SaveData {
             if(MainActivity.debag){Log.d("tag","呼び出された　リスト名は$list")}
 
             return list
+        }
+
+        fun levelUP(context: Context,score: Int):Int{
+            val prefs = context.getSharedPreferences("preferences_key_sample", Context.MODE_PRIVATE)
+            var level = prefs.getInt(context.getString(R.string.score_level),0)
+            var tScore = prefs.getInt(context.getString(R.string.score_totalScore),0)
+            val levelTable = arrayListOf<Int>(
+                100,800,1450,2200,3050,4000,5050,6200,7450,8800,
+                10250,11800,13450,15200,17050,19000,21050,23200,25450,27800,999999
+
+            )
+            tScore = tScore + score
+
+            for (i in 0 until levelTable.count()-1){
+                if (tScore < levelTable[i]){
+                    level = i
+                    break
+                }
+            }
+            val shardPrefEditor = prefs.edit()
+            shardPrefEditor.putInt(context.getString(R.string.score_totalScore),tScore)
+            shardPrefEditor.putInt(context.getString(R.string.score_level),level)
+            shardPrefEditor.apply()
+            return level
         }
     }
 }

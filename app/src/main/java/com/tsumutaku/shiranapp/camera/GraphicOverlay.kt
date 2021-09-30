@@ -61,7 +61,7 @@ class GraphicOverlay(context: Context, attrs: AttributeSet) : View(context, attr
 
 
     fun isonBitmap():Boolean{
-        if(MainActivity.debag){Log.d("pose","ビットマップの存在 = ${isOnBitmap}")}
+        //if(MainActivity.debag){Log.d("pose","ビットマップの存在 = ${isOnBitmap}")}
         return isOnBitmap
     }
 

@@ -13,8 +13,8 @@ android {
         applicationId "com.tsumutaku.shiranapp"
         minSdkVersion 26
         targetSdkVersion 30
-        versionCode 13
-        versionName "1.12"
+        versionCode 15
+        versionName "1.14"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
