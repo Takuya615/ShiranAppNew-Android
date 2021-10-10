@@ -97,7 +97,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     companion object{
-        val debag = true//　　　　　デバック時　全てのログとFirebaseイベントログを作動させない 本番でfalse
+        val debag = false//　　　　　デバック時　全てのログとFirebaseイベントログを作動させない 本番でfalse
         val TAG = "MainActivity"
     }
 }
