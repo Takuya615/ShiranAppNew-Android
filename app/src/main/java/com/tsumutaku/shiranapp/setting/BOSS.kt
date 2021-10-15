@@ -24,7 +24,7 @@ class bossData {
         val total = prefs.getInt(context.getString(com.tsumutaku.shiranapp.R.string.score_totalDay),0)
         for (i in 1..list.size-1){
             if(total == list[i].encount){
-                prefs.edit().putInt(context.getString(com.tsumutaku.shiranapp.R.string.bossNum),i)
+                prefs.edit().putInt(context.getString(com.tsumutaku.shiranapp.R.string.bossNum),i).apply()
                 return list[i]
             }
         }
@@ -59,11 +59,11 @@ class bossData {
     fun bossList():Array<boss>{
         val list = arrayOf(
             boss(0, "", 0.0f, -1, 0),
-        boss(R.drawable.boss1,  "BOSS",  1000.0f,  6,  1000),
-        boss(R.drawable.boss1,"BOSS", 2000.0f, 12,  2000),
-        boss( R.drawable.boss2, "BOSS",3000.0f, 18, 3000),
-        boss(R.drawable.boss2, "BOSS", 3750.0f,24,4000),
-        boss(R.drawable.boss2, "BOSS", 4000.0f, 30, 5000)
+        boss(R.drawable.boss1,  "BOSS",  1000.0f,  7,  1000),
+        boss(R.drawable.boss1,"BOSS", 2000.0f, 14,  2000),
+        boss( R.drawable.boss2, "BOSS",3000.0f, 21, 3000),
+        boss(R.drawable.boss2, "BOSS", 3500.0f,28,4000),
+        boss(R.drawable.boss2, "BOSS", 4000.0f, 35, 5000)
         )
         return list
     }

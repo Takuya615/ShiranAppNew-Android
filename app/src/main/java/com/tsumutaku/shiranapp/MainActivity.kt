@@ -39,6 +39,13 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val prefs = getSharedPreferences( "preferences_key_sample", Context.MODE_PRIVATE)
+        val Tuto1 : Boolean = prefs.getBoolean("Tuto1",false)
+        if(!Tuto1){
+            val intent= Intent(this, IntroActivity::class.java)
+            startActivity(intent)
+        }
+
     }
 
     override fun onResume() {
@@ -58,14 +65,9 @@ class MainActivity : AppCompatActivity() {
         val diamond = prefs.getInt(getString(R.string.score_diamond),0)
         binding.textView.text = "Lv.${level}"
         binding.diamondTextView.text = diamond.toString()
-        val Tuto1 : Boolean = prefs.getBoolean("Tuto1",false)
-        if(!Tuto1){
-            val intent= Intent(this, IntroActivity::class.java)
-            startActivity(intent)
-        }
+
 
         binding.fab.setOnClickListener { view ->
-            //progressbar.visibility = android.widget.ProgressBar.VISIBLE
             EventAnalytics().tapFab(this)
             val intent= Intent(this, CameraX2Activity::class.java)
             startActivity(intent)

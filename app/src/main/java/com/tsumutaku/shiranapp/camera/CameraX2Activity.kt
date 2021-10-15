@@ -43,6 +43,7 @@ class CameraX2Activity() : AppCompatActivity() {
     private lateinit var cameraExecutor: ExecutorService
     private lateinit var graphicOverlay:GraphicOverlay
     private lateinit var captureButton: ImageButton
+    private lateinit var backButton: ImageButton
     private lateinit var captureText: TextView
     private lateinit var timer: TextView
     private lateinit var score: TextView
@@ -84,6 +85,7 @@ class CameraX2Activity() : AppCompatActivity() {
 
         graphicOverlay = binding.graphicOverlay
         captureButton = binding.captureButton
+        backButton = binding.backButton
         captureText = binding.captureButtonText
         score = binding.scoreBoard
         bossHPbar = binding.progressbar
@@ -91,11 +93,13 @@ class CameraX2Activity() : AppCompatActivity() {
         timer.text = setTimer()
         sound = Sounds.getInstance(this)
         // Set up the listener for take photo button
-        captureButton.setOnClickListener { startScore() }
+        captureButton.setOnClickListener { startScore();backButton.visibility = View.INVISIBLE }
+        backButton.setOnClickListener { finish() }
         cameraExecutor = Executors.newSingleThreadExecutor()
 
         //ポーズ検出
 
+        val damage = prefs.getInt(getString(R.string.bossDamage),0)
         runnable = Runnable {
             if (!graphicOverlay.isonBitmap()){
                 val bitmap = binding.viewFinder.bitmap
@@ -104,7 +108,7 @@ class CameraX2Activity() : AppCompatActivity() {
                     if (isBoss){
                         bossHPbar.visibility = View.VISIBLE
                         bossHPbar.max = exiteBoss!!.maxHP.toInt()
-                        bossHPbar.progress = graphicOverlay.ExerciseIntensity(Size(bitmap!!.width,bitmap.height))
+                        bossHPbar.progress = damage + graphicOverlay.ExerciseIntensity(Size(bitmap!!.width,bitmap.height))
                     }else{
                         score.visibility = View.VISIBLE
                         score.text = " Score ${graphicOverlay.ExerciseIntensity(Size(bitmap!!.width,bitmap.height))}" //表示されているスコアの値に加算していくメソッド

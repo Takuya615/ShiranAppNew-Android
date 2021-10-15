@@ -21,22 +21,15 @@ class TutorialCoachMarkActivity(context: Context) {
     val Tuto1 : Boolean = prefs.getBoolean("Tuto1",false)
     val Tuto2 : Boolean = prefs.getBoolean("Tuto2",false)
     val Tuto3 : Boolean = prefs.getBoolean("Tuto3",false)
-    val TutoForGallery : Boolean = prefs.getBoolean("TutoForGallery",false)
     val g : SharedPreferences.Editor = prefs.edit()
-
-    fun TutoForGallery() {
-        g.putBoolean("TutoForGallery", true)
-        g.commit()
-    }
 
     //メイン画面でのコーチマーク
     fun CoachMark1(activity: Activity, context: Context){
         if(!Tuto1){
-            g.putBoolean("Tuto1", true)
-            g.commit()
+            g.putBoolean("Tuto1", true).commit()
 
             val target1 = activity.findViewById<FloatingActionButton>(R.id.fab)
-            val Target1 = sreateCircleUI(target1,activity,"　１日１回\n ココからカメラへ移動します","",0f,0f,-2f)
+            val Target1 = sreateCircleUI(target1,activity,"　１日１回\n ココからカメラへ移動します","",0f,-2f)
 
             // コーチマークを作成
             Spotlight.with(activity)
@@ -61,6 +54,18 @@ class TutorialCoachMarkActivity(context: Context) {
                         //activity.recreate()
                     }
                 })
+                .start()
+        }else if(!Tuto2 && Tuto3){
+            g.putBoolean("Tuto2", true).commit()
+            val target1 = activity.findViewById<FloatingActionButton>(R.id.fab)
+            val Target1 = sreateCircleUI(target1,activity,"　チュートリアル達成！！",
+                "ここまではチュートリアルです\nもう一度ここをタップ\n１日１回 敵が現れ、たおすとボーナス報酬がでます。",0f,-4f)
+            Spotlight.with(activity)
+                .setOverlayColor(R.color.colorCoachMark)
+                .setDuration(1000L)
+                .setAnimation(DecelerateInterpolator(1f))
+                .setTargets(Target1)
+                .setClosedOnTouchedOutside(true)
                 .start()
         }
     }
@@ -117,7 +122,7 @@ class TutorialCoachMarkActivity(context: Context) {
             //val target2 = activity.findViewById<ImageButton>(R.id.capture_button)
             val Target2 = sreateCircleUI(target2,activity,"タップしてはじめる",
                 "３秒後にスタート。\n タイムリミットまでスコアを記録します。\n" +
-                        "(録画機能はありません)",5f,5f,-2f)
+                        "(録画機能はありません)",5f,-2f)
 
             //val target3 = activity.findViewById<TextView>(R.id.scoreBoard)
             val Target3 = sreateUI(target3,activity,"スコア",
@@ -175,20 +180,20 @@ class TutorialCoachMarkActivity(context: Context) {
         return firstTarget
     }
 
-    //引数（ボタン、アクティビティ、タイトル、本文、光円半径、なし、文字列下なら正、文字列上なら負のFloat）　　円の場合
-    fun sreateCircleUI(target: View, activity: Activity, title:String?, scrip:String, plusX:Float, plusY:Float, plusP:Float): SimpleTarget {
+    //引数（ボタン、アクティビティ、タイトル、本文、光円半径、文字列下なら正、文字列上なら負のFloat）　　円の場合
+    fun sreateCircleUI(target: View, activity: Activity, title:String?, scrip:String, radius:Float, pointY:Float): SimpleTarget {
 
         val targetLocation = IntArray(2)
         target.getLocationInWindow(targetLocation)
         val targetX = targetLocation[0] + target.width/2f
         val targetY = targetLocation[1] + target.height/2f
-        val targetRadius = 78f + plusX
+        val targetRadius = 78f + radius
         val firstTarget = SimpleTarget.Builder(activity)
             .setPoint(targetX,targetY)//ハイライトの位置
             .setShape(Circle(targetRadius))//ハイライトの大きさ
             .setTitle(title)
             .setDescription(scrip)
-            .setOverlayPoint(2f, targetLocation[1] + target.height * plusP)//文字列の位置
+            .setOverlayPoint(2f, targetLocation[1] + target.height * pointY)//文字列の位置
             .build()
 
 

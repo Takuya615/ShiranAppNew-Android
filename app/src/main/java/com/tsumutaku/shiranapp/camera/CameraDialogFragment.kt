@@ -4,6 +4,8 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
 import android.content.SharedPreferences
+import android.graphics.Color
+import android.graphics.PorterDuff
 import android.media.Image
 import android.os.Bundle
 import android.util.Log
@@ -26,6 +28,8 @@ class SimpleDialogFragment(var score: Int,val boss: boss?): DialogFragment() {
     //var timesScore = 1.0
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val prefs = requireContext().getSharedPreferences("preferences_key_sample", Context.MODE_PRIVATE)
+        val damage = prefs.getInt(requireContext().getString(R.string.bossDamage),0)
         val diff = SaveData().editScores(requireContext(),score)
         val dialog: Dialog = Dialog(requireContext())
         val bonus = timesScore(requireContext())
@@ -47,18 +51,23 @@ class SimpleDialogFragment(var score: Int,val boss: boss?): DialogFragment() {
             val image = dialogView.findViewById<ImageView>(R.id.image)
             val text = dialogView.findViewById<TextView>(R.id.textView)
 
-            if (score<boss.maxHP){
+            if (score+damage < boss.maxHP){
                 image.setImageResource(boss.image)
                 if (boss.encount == 0){
                     EventAnalytics().loseEnemy(requireContext(),boss.name)
                     message = "${boss.name}に負けました\n" + mes(score/2) + "\n"  + "ペナルティー　Exp 半分\n"+message
                 }else{
-                    message = "${boss.name}に負けました\n" + mes(score/10) + "\n" + "ボスペナルティー　Exp 1/1\n" +message
+                    prefs.edit().putInt(getString(R.string.bossDamage),score+damage).apply()
+                    message = "${boss.name}に負けました\n" + mes(score/10) + "\n" + "ボスペナルティー　Exp 1/10\n" +message
                 }
                 text.text = message
             }else{
-
+                prefs.edit()
+                    .putInt(getString(R.string.bossNum),0)
+                    .putInt(getString(R.string.bossDamage),0)
+                    .apply()
                 image.setImageResource(boss.image)
+                image.setColorFilter(Color.argb(180, 255 , 255, 255))//(Color.parseColor(Color), PorterDuff.Mode.SRC_IN);
                 message = "  VICTORY!!\n" + mes(score + boss.bonus) + "\n" +message + "討伐ボーナス　Exp ＋${boss.bonus}"
                 text.text = message
             }
