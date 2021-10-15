@@ -2,7 +2,11 @@
     <string name="app_name">しらんプリ</string>
     <string name="title_home">ホーム</string>
     <string name="title_friends">ビデオ</string>
-    <string name="title_medal">？？？</string>
+    <string name="title_medal">スケット</string>
+
+    //その日ごとに使い切りのデータ
+    <string name="bossNum">BossNumber</string>
+    <string name="bossDamage">TotalDamageForBoss</string>
 
     //新しいデータに更新するときには、リセットが必要なデータ
     <string name="prefs_check_point">firstfragment_1</string>
@@ -15,13 +19,16 @@
     <string name="prefs_date_list">DashboardFragment</string>
     <string name="prefs_score_list">DashboardFragment_</string>
 
-    //スコアとなる値
+    //スコアとなる値 消しちゃダメ
     <string name="score_totalDay">CameraDialogFragment1</string>
     <string name="score_totalScore">CameraDialogFragment2</string>
     <string name="score_level">CameraDialogFragment3</string>
     <string name="score_continuous">CameraDialogFragment4</string>
     <string name="score_recover">CameraDialogFragment5</string>
     <string name="score_doNotDay">CameraDialogFragment6</string>
+    <string name="score_coin">Coins</string>
+    <string name="score_diamond">Diamonds</string>
+    <string name="got_dia_history">gotDiamonds</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 

@@ -17,4 +17,10 @@
         android:title="プライバシーポリシー"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/action_shear"
+        android:orderInCategory="100"
+        android:title="シェア"
+        app:showAsAction="never" />
+
 </menu>

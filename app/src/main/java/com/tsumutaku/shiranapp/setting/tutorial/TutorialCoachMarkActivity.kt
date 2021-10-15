@@ -121,7 +121,7 @@ class TutorialCoachMarkActivity(context: Context) {
 
             //val target3 = activity.findViewById<TextView>(R.id.scoreBoard)
             val Target3 = sreateUI(target3,activity,"スコア",
-                "開閉ジャンプやバーピーなど、全身運動でよりハイスコアを目指しましょう！",5f,5f,-4f)
+                "STARTすると、ココにスコアが表示されます。",5f,5f,-4f)
 
 
             // コーチマークを作成

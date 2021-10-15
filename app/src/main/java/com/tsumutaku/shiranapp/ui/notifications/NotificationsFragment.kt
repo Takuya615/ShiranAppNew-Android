@@ -17,6 +17,7 @@ import com.tsumutaku.shiranapp.R
 import com.tsumutaku.shiranapp.camera.SaveData
 import com.tsumutaku.shiranapp.camera.SimpleDialogFragment
 import com.tsumutaku.shiranapp.databinding.FragmentNotificationsBinding
+import com.tsumutaku.shiranapp.setting.EventAnalytics
 import com.tsumutaku.shiranapp.ui.dashboard.VideoListAdapter
 
 class NotificationsFragment : Fragment() {
@@ -68,6 +69,10 @@ class NotificationsFragment : Fragment() {
             override fun onItemClickListener(view: View, position: Int, clickedText: String) {
                 when (view.getId()) {
                     R.id.itemCharacter -> {
+
+                        if(NotificationsViewModel().characters[position].id == "rabbit"){
+                            EventAnalytics().lastCharacterReleased(requireContext())
+                        }
 
                         //ここでキャラごとのViewを変更する
                         if(NotificationsViewModel().characters[position].id == "wanwan"){

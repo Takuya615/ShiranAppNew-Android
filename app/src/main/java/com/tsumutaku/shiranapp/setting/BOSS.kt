@@ -1,70 +1,77 @@
 package com.tsumutaku.shiranapp.setting
 
 import android.content.Context
-import android.content.SharedPreferences
-import com.tsumutaku.shiranapp.R
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
+import com.tsumutaku.shiranapp.R
 
-class BOSS {
+class bossData {
 
     fun isExit(context:Context):boss?{
         val prefs = context.getSharedPreferences("preferences_key_sample", Context.MODE_PRIVATE)
-        val setday: String? = prefs.getString(context.getString(R.string.prefs_dayly_check), "2021-01-28")//前回利用した日
+        val setday: String? = prefs.getString(context.getString(com.tsumutaku.shiranapp.R.string.prefs_dayly_check), "2000-01-28")//前回利用した日
         val now = LocalDate.now() //2019-07-28T15:31:59.754
         val day1 = LocalDate.parse(setday)//2019-08-28T10:15:30.123
         val different = ChronoUnit.DAYS.between(day1, now).toInt() // diff: 30
+        //val different = 1
 
         if(different > 365){return null}
         if(different == 0){return null}
+        val list = bossList()
+        val bossNum = prefs.getInt(context.getString(com.tsumutaku.shiranapp.R.string.bossNum),0)
+        if(bossNum > 0){return list[bossNum]}
 
+        val total = prefs.getInt(context.getString(com.tsumutaku.shiranapp.R.string.score_totalDay),0)
+        for (i in 1..list.size-1){
+            if(total == list[i].encount){
+                prefs.edit().putInt(context.getString(com.tsumutaku.shiranapp.R.string.bossNum),i)
+                return list[i]
+            }
+        }
 
-        return null
+        val enemys = enemyList()
+        return enemys.random()
     }
-    fun showBoss(){
 
-    }
     fun enemyList():Array<boss>{
         val list = arrayOf(
-            boss("enemy1", "スライム",170.0f,0,50),
-            boss("enemy1", "スライム",170.0f,0,50),
-            boss("enemy1", "スライム",170.0f,0,50),
-            boss("enemy1", "スライム",170.0f,0,50),
-            boss("enemy1", "スライム",170.0f,0,50),
-            boss("enemy1", "スライム",170.0f,0,50),
-            boss("enemy1", "スライム",170.0f,0,50),
-            boss("enemy1", "スライム",170.0f,0,50),
-            boss("enemy1", "スライム",170.0f,0,50),
-            boss("enemy2","おばけ",200.0f, 0,60),
-            boss("enemy2","おばけ",200.0f, 0,60),
-            boss("enemy2","おばけ",200.0f, 0,60),
-            boss("enemy2","おばけ",200.0f, 0,60),
-            boss("enemy2","おばけ",200.0f, 0,60),
-            boss("enemy3", "コブラ",350.0f, 0,90),
-            boss("enemy3", "コブラ",350.0f, 0,90),
-            boss("enemy3", "コブラ",350.0f, 0,90),
-            boss("enemy3", "コブラ",350.0f, 0,90),
-            boss("enemy4", "あばれ牛", 600.0f, 0, 200),
-            boss("enemy5","あばれグマ", 800.0f, 0, 300),
+            boss(R.drawable.enemy1, "スライム",320.0f,0,100),
+            boss(R.drawable.enemy1, "スライム",340.0f,0,100),
+            boss(R.drawable.enemy1, "スライム",360.0f,0,100),
+            boss(R.drawable.enemy1, "スライム",380.0f,0,100),
+            boss(R.drawable.enemy1, "スライム",400.0f,0,100),
+            boss(R.drawable.enemy1, "スライム",420.0f,0,100),
+            boss(R.drawable.enemy1, "スライム",440.0f,0,100),
+            boss(R.drawable.enemy1, "スライム",460.0f,0,100),
+
+            boss(R.drawable.enemy2,"おばけ",500.0f, 0,150),
+            boss(R.drawable.enemy2,"おばけ",500.0f, 0,150),
+            boss(R.drawable.enemy2,"おばけ",600.0f, 0,150),
+            boss(R.drawable.enemy2,"おばけ",600.0f, 0,150),
+            boss(R.drawable.enemy2,"おばけ",700.0f, 0,150),
+            boss(R.drawable.enemy3, "コブラ",800.0f, 0,200),
+            boss(R.drawable.enemy3, "コブラ",900.0f, 0,200),
+            boss(R.drawable.enemy4, "あばれ牛", 1300.0f, 0, 400),
+            boss(R.drawable.enemy5,"あばれグマ", 1500.0f, 0, 500),
         )
         return list
     }
     fun bossList():Array<boss>{
         val list = arrayOf(
-            boss("", "", 0.0f, -1, 0),
-        boss("boss1",  "BOSS",  630.0f,  6,  700),
-        boss("boss1","BOSS", 900.0f, 12,  1000),
-        boss( "boss2", "BOSS", 1170.0f, 18, 1200),
-        boss("boss2", "BOSS", 1440.0f,24,1500),
-        boss("boss2", "BOSS", 1710.0f, 30, 1800)
+            boss(0, "", 0.0f, -1, 0),
+        boss(R.drawable.boss1,  "BOSS",  1000.0f,  6,  1000),
+        boss(R.drawable.boss1,"BOSS", 2000.0f, 12,  2000),
+        boss( R.drawable.boss2, "BOSS",3000.0f, 18, 3000),
+        boss(R.drawable.boss2, "BOSS", 3750.0f,24,4000),
+        boss(R.drawable.boss2, "BOSS", 4000.0f, 30, 5000)
         )
         return list
     }
 }
 
 data class boss(
+    val image:Int,
     val name: String,
-    val image:String,
     val maxHP: Float,
     val encount: Int,
     val bonus: Int

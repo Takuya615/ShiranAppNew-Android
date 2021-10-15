@@ -9,9 +9,11 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.util.Size
 import android.view.View
 import android.view.WindowManager
 import android.widget.ImageButton
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -26,7 +28,11 @@ import com.tsumutaku.shiranapp.MainActivity
 import com.tsumutaku.shiranapp.R
 import com.tsumutaku.shiranapp.databinding.ActivityCameraX2Binding
 import com.tsumutaku.shiranapp.databinding.ActivityMainBinding
+import com.tsumutaku.shiranapp.setting.boss
+import com.tsumutaku.shiranapp.setting.bossData
 import com.tsumutaku.shiranapp.setting.tutorial.TutorialCoachMarkActivity
+import com.tsumutaku.shiranapp.ui.notifications.NotificationsDialogFragment2
+import com.tsumutaku.shiranapp.ui.notifications.NotificationsViewModel
 import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -40,10 +46,14 @@ class CameraX2Activity() : AppCompatActivity() {
     private lateinit var captureText: TextView
     private lateinit var timer: TextView
     private lateinit var score: TextView
+    private lateinit var bossHPbar: ProgressBar
     private lateinit var sound:Sounds
     private var isCapture: Boolean = false
     private var mTimer: Timer? = null
     private var time:Int = 0
+
+    var exiteBoss: boss? = null
+    var isBoss: Boolean = false
 
     var runnable = Runnable {  }
     val handler = Handler(Looper.getMainLooper())
@@ -53,10 +63,15 @@ class CameraX2Activity() : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityCameraX2Binding.inflate(layoutInflater)
         setContentView(binding.root)
-
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)//画面をオンのままにしておく
         supportActionBar!!.hide()//Navigationを消す
 
+        exiteBoss = bossData().isExit(this)
+        if(exiteBoss != null) {
+            isBoss = true
+            val dialog = showEnemyDialogFragment(exiteBoss!!)
+            dialog.show(supportFragmentManager, "showBoss")
+        }
         // Request camera permissions???
         if (allPermissionsGranted()) {
             startCamera()
@@ -71,6 +86,7 @@ class CameraX2Activity() : AppCompatActivity() {
         captureButton = binding.captureButton
         captureText = binding.captureButtonText
         score = binding.scoreBoard
+        bossHPbar = binding.progressbar
         timer = binding.timer
         timer.text = setTimer()
         sound = Sounds.getInstance(this)
@@ -79,12 +95,21 @@ class CameraX2Activity() : AppCompatActivity() {
         cameraExecutor = Executors.newSingleThreadExecutor()
 
         //ポーズ検出
+
         runnable = Runnable {
             if (!graphicOverlay.isonBitmap()){
                 val bitmap = binding.viewFinder.bitmap
                 if(bitmap!=null){graphicOverlay.poseDetectionML(bitmap)}//　　GraphicOverlayクラスで、　ポーズ検出し、それを画面に描画する
                 if(isCapture){
-                    score.text = " Score ${graphicOverlay.ExerciseIntensity()}" //表示されているスコアの値に加算していくメソッド
+                    if (isBoss){
+                        bossHPbar.visibility = View.VISIBLE
+                        bossHPbar.max = exiteBoss!!.maxHP.toInt()
+                        bossHPbar.progress = graphicOverlay.ExerciseIntensity(Size(bitmap!!.width,bitmap.height))
+                    }else{
+                        score.visibility = View.VISIBLE
+                        score.text = " Score ${graphicOverlay.ExerciseIntensity(Size(bitmap!!.width,bitmap.height))}" //表示されているスコアの値に加算していくメソッド
+                    }
+
                 }
             }
             handler.postDelayed(runnable,50)
@@ -163,7 +188,7 @@ class CameraX2Activity() : AppCompatActivity() {
                         sound.playSound(Sounds.SAD_TROMBONE)
                         mTimer?.cancel()
                         //finish()
-                        val dialog = SimpleDialogFragment(graphicOverlay.ExerciseIntensity())
+                        val dialog = SimpleDialogFragment(graphicOverlay.gettotalPoint(),exiteBoss)
                         dialog.show(supportFragmentManager, "simple")
                     }
                 }

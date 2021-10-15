@@ -63,7 +63,7 @@ class HomeFragment : Fragment() {
         binding.retryCounter.text = revival.toString()
         binding.contiCounter.text = ncd.toString()
 
-        val times = SimpleDialogFragment.timesScore(prefs)
+        val times = SimpleDialogFragment.timesScore(requireContext())
         if(times>1.0){
             binding.image.setImageResource(R.drawable.c_dog)
         }

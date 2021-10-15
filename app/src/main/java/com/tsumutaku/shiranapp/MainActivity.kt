@@ -1,12 +1,16 @@
 package com.tsumutaku.shiranapp
 
+import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -20,6 +24,11 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.FirebaseAuth
 import com.tsumutaku.shiranapp.camera.CameraX2Activity
 import com.tsumutaku.shiranapp.setting.IntroActivity
+import androidx.core.app.ShareCompat
+import androidx.core.app.ShareCompat.IntentBuilder
+import androidx.core.app.ActivityCompat.startActivityForResult
+import com.tsumutaku.shiranapp.setting.EventAnalytics
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -29,6 +38,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
     }
 
     override fun onResume() {
@@ -45,7 +55,9 @@ class MainActivity : AppCompatActivity() {
 
         val prefs = getSharedPreferences( "preferences_key_sample", Context.MODE_PRIVATE)
         val level = prefs.getInt(getString(R.string.score_level),0)
+        val diamond = prefs.getInt(getString(R.string.score_diamond),0)
         binding.textView.text = "Lv.${level}"
+        binding.diamondTextView.text = diamond.toString()
         val Tuto1 : Boolean = prefs.getBoolean("Tuto1",false)
         if(!Tuto1){
             val intent= Intent(this, IntroActivity::class.java)
@@ -54,16 +66,26 @@ class MainActivity : AppCompatActivity() {
 
         binding.fab.setOnClickListener { view ->
             //progressbar.visibility = android.widget.ProgressBar.VISIBLE
-            if(!MainActivity.debag){
-                val firebaseAnalytics = FirebaseAnalytics.getInstance(this)
-                val bundle = Bundle()
-                bundle.putString(FirebaseAnalytics.Param.METHOD, "DAYLY-MOVIE")
-                firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle)
-            }
-
+            EventAnalytics().tapFab(this)
             val intent= Intent(this, CameraX2Activity::class.java)
             startActivity(intent)
             //finish()
+        }
+        val diaHistry = prefs.getBoolean(getString(R.string.got_dia_history),false)
+        if (!diaHistry){binding.fab2.visibility = View.VISIBLE}
+        binding.fab2.setOnClickListener { view ->
+            val save = prefs.edit()
+            save.putInt(getString(R.string.score_diamond),50)
+            save.putBoolean(getString(R.string.got_dia_history),true)
+            binding.fab2.visibility = View.INVISIBLE
+            binding.diamondTextView.text = "50"
+            save.apply()
+            //ダイアログ
+            AlertDialog.Builder(this)
+                .setIcon(R.drawable.diamonds)
+                .setTitle("インストール\nありがとうございます！！")
+                .setMessage("ダイヤ×50コ プレゼント！！\n(＊今はまだアプリ内での使い道はありません。)")
+                .show()
         }
         coachMark()
     }
@@ -90,10 +112,23 @@ class MainActivity : AppCompatActivity() {
                 true
             }*/
             R.id.action_settings -> startActivity(intent3)
-
             R.id.action_privacy_policy -> startActivity(intent4)
+            R.id.action_shear -> openChooserToShareThisApp()
         }
         return super.onOptionsItemSelected(item)
+    }
+    private fun openChooserToShareThisApp() {
+        val builder = IntentBuilder.from(this@MainActivity)
+        val subject = ""
+        val bodyText = "Android版はこちらから！！" +
+                "\n https://play.google.com/store/apps/details?id=com.tsumutaku.shiranapp"
+        builder.setSubject(subject) /// 件名
+            .setText(bodyText) /// 本文
+            .setType("text/plain")
+        val intent = builder.createChooserIntent()
+        /// 結果を受け取らずに起動
+        builder.startChooser()
+        EventAnalytics().share(this)
     }
 
     companion object{

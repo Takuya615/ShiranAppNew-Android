@@ -2,6 +2,7 @@ package com.tsumutaku.shiranapp.setting
 
 import android.app.AlertDialog
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -22,6 +23,12 @@ class IntroActivity : AppCompatActivity() {
         binding = ActivityIntroBinding.inflate(layoutInflater)
         setContentView(binding.root)
         settingButtons()
+        val prefs = getSharedPreferences( "preferences_key_sample", Context.MODE_PRIVATE)
+        val Tuto1 : Boolean = prefs.getBoolean("Tuto1",false)
+        if(!Tuto1){
+            val intent= Intent(this, VideoPlayerActivity::class.java)
+            startActivity(intent)
+        }
     }
     //戻るボタンを押すと今いるviewを削除する
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
